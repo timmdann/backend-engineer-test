@@ -79,6 +79,75 @@ Validated:
 400 {“error”: “<message>”}.
 ```
 
+**_First step:_**
+
+```bash
+{
+  "id": "d1582b9e2cac15e170c39ef2e85855ffd7e6a820550a8ca16a2f016d366503dc",
+  "height": 1,
+  "transactions": [
+    {
+      "id": "tx1",
+      "inputs": [],
+      "outputs": [{ "address": "addr1", "value": 10 }]
+    }
+  ]
+}
+```
+
+**Checking balance:**
+
+- GET /balance/addr1 → `{“address”:‘addr1’,“balance”:10}`
+- GET /balance/addr2 → 0
+- GET /balance/addr3 → 0
+
+**_Second step:_**
+
+```bash
+{
+  "id": "c4701d0bfd7179e1db6e33e947e6c718bbc4a1ae927300cd1e3bda91a930cba5",
+  "height": 2,
+  "transactions": [
+    {
+      "id": "tx2",
+      "inputs": [{ "txId": "tx1", "index": 0 }],
+      "outputs": [
+        { "address": "addr2", "value": 4 },
+        { "address": "addr3", "value": 6 }
+      ]
+    }
+  ]
+}
+```
+
+**Checking balance:**
+
+- GET /balance/addr1 → 0
+- GET /balance/addr2 → 4
+- GET /balance/addr3 → 6
+
+**_Third step:_**
+
+```bash
+{
+  "id": "4e5f22a2abacfaf2dcaaeb1652aec4eb65028d0f831fa435e6b1ee931c6799ec",
+  "height": 3,
+  "transactions": [
+    {
+      "id": "tx3",
+      "inputs": [],
+      "outputs": [{ "address": "addr1", "value": 5 }]
+    }
+  ]
+}
+```
+
+**Checking balance:**
+
+- GET /balance/addr1 → 5
+- GET /balance/addr2 → 4
+- GET /balance/addr3 → 6
+
 ![alt text](image.png)
 
 ### GET /balance/:address
