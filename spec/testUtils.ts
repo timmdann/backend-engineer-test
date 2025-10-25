@@ -4,28 +4,22 @@ import { createHash } from "crypto";
 
 export const BASE = "http://localhost:3000";
 
-// общий PSQL pool (один на все тесты)
 export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
-// безопасное завершение пула (идемпотентно)
 let poolEnded = false;
 export async function endPool() {
   if (poolEnded) return;
   poolEnded = true;
   try {
     await pool.end();
-  } catch {
-    // ignore
-  }
+  } catch {}
 }
 
-// sha256 + helper для block.id
 export const sha256 = (s: string) =>
   createHash("sha256").update(s).digest("hex");
 export const blockId = (height: number, ...txIds: string[]) =>
   sha256(String(height) + txIds.join("")).toLowerCase();
 
-// Полный ресет состояния индексера (начинаем с height=0)
 export async function resetDb() {
   const c = await pool.connect();
   try {
@@ -49,7 +43,6 @@ export async function resetDb() {
   }
 }
 
-// Установить произвольную высоту (для теста лимита отката)
 export async function setCurrentHeight(h: number) {
   await pool.query(
     `INSERT INTO meta(key, value) VALUES ('current_height', $1)
@@ -82,7 +75,6 @@ export async function rollbackTo(height: number) {
   return { status: r.status, json };
 }
 
-// Маленькие ассерты (с короткими сообщениями)
 export function expectOk(res: { status: number }) {
   expect(res.status).toBe(200);
 }
