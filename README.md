@@ -79,6 +79,8 @@ Validated:
 400 {“error”: “<message>”}.
 ```
 
+![alt text](image.png)
+
 ### GET /balance/:address
 
 Returns the current balance of the address:
@@ -86,6 +88,8 @@ Returns the current balance of the address:
 ```bash
 { "address": "addr1", "balance": 10 }
 ```
+
+![alt text](image-2.png)
 
 ### POST /rollback?height=number
 
@@ -109,3 +113,5 @@ Returns the current balance of the address:
 ```bash
 400 {“error”: “<message>”}.
 ```
+
+![alt text](image-1.png)
